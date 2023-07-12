@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColorModeSwitcher } from '../../ColorModeSwitcher';
+import { ColorModeSwitcher } from '../../../ColorModeSwitcher';
 import {
   Button,
   Drawer,
@@ -27,7 +27,7 @@ const LinkButton = ({ url = '/', title = 'Home' }) => {
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const user = {
     role: 'admin',
   };
