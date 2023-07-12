@@ -6,6 +6,10 @@ import Footer from './components/Layout/Footer/Footer';
 import Login from './components/Auth/Login';
 import Contact from './components/Contact/Contact';
 import Request from './components/Request/Request';
+import Register from './components/Auth/Register';
+import ForgetPassword from './components/Auth/ForgetPassword';
+import ResetPassword from './components/Auth/ResetPassword';
+import Courses from './components/Courses/Courses';
 const App = () => {
   return (
     <>
@@ -13,11 +17,12 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/courses" element={<Home />} />
+          <Route path="/courses" element={<Courses />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Login />} />
-          <Route path="/forgetpassword" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgetpassword" element={<ForgetPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/request" element={<Request />} />
         </Routes>
         <Footer />
