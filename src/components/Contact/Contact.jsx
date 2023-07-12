@@ -5,21 +5,35 @@ import {
   FormLabel,
   Heading,
   Input,
+  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Contact = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   return (
-    <Container height={'95vh'}>
+    <Container height={'92vh'}>
       <VStack height={'full'} justifyContent={'center'} spacing={16}>
-        <Heading children={'Welcome to CourseBundler'} />
+        <Heading children="Contact Us" />
         <form style={{ width: '100%' }}>
-          <Box my={4}>
+          <Box marginY={4}>
+            <FormLabel htmlFor="name" children="Name" />
+            <Input
+              required
+              id="name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="abc"
+              type="text"
+              focusBorderColor="yellow.500"
+            />
+          </Box>
+          <Box marginY={4}>
             <FormLabel htmlFor="email" children="Email Address" />
             <Input
               required
@@ -32,35 +46,28 @@ const Login = () => {
             />
           </Box>
           <Box marginY={4}>
-            <FormLabel htmlFor="password" children="Password" />
-            <Input
+            <FormLabel htmlFor="message" children="Message" />
+            <Textarea
               required
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Enter your password..."
-              type="password"
+              id="message"
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              placeholder="Your message here..."
               focusBorderColor="yellow.500"
             />
           </Box>
-          <Box my={4}>
-            <Link to="/forgetpassword">
-              <Button fontSize={'sm'} variant={'link'}>
-                Forget Password
-              </Button>
-            </Link>
-          </Box>
+
           <Button my={4} colorScheme="yellow" type="submit">
-            Login
+            Send
           </Button>
+
           <Box my={4}>
-            New User?{' '}
-            <Link to={'/register'}>
+            Request for a courses?{' '}
+            <Link to={'/request'}>
               <Button colorScheme="yellow" variant={'link'}>
-                Sign up
+                Click here
               </Button>{' '}
             </Link>
-            :
           </Box>
         </form>
       </VStack>
@@ -68,4 +75,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Contact;

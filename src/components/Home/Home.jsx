@@ -10,8 +10,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import vg from '../assets/images/bg.png';
-import introVideo from '../assets/videos/introVideo.mp4';
+import vg from '../../assets/images/bg.png';
+import introVideo from '../../assets/videos/introVideo.mp4';
 import { Link } from 'react-router-dom';
 import { CgGoogle, CgYoutube } from 'react-icons/cg';
 import { SiCoursera, SiUdemy } from 'react-icons/si';
