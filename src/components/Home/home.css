@@ -51,10 +51,11 @@
 }
 
 .course {
-  background-color: red;
-  width: 250px;
+  width: 300px;
   margin-bottom: 1rem;
   transition: all 0.5s;
+  padding: 0.5rem;
+  box-sizing: border-box;
 }
 
 .course:hover {

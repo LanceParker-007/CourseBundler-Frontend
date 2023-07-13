@@ -24,7 +24,7 @@ const Course = ({
   lectureCount,
 }) => {
   return (
-    <VStack className="course" alignItems={['center', 'flex-start']}>
+    <VStack className="course" justifyContent={['center', 'flex-start']}>
       <Image src={imageSrc} boxSize={60} objectFit={'contain'} />
       <Heading
         children={title}

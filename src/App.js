@@ -10,6 +10,7 @@ import Register from './components/Auth/Register';
 import ForgetPassword from './components/Auth/ForgetPassword';
 import ResetPassword from './components/Auth/ResetPassword';
 import Courses from './components/Courses/Courses';
+import About from './components/About/About';
 const App = () => {
   return (
     <>
@@ -19,11 +20,12 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/request" element={<Request />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
-          <Route path="/request" element={<Request />} />
         </Routes>
         <Footer />
       </Router>
