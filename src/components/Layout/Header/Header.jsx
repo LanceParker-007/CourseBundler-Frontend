@@ -27,7 +27,7 @@ const LinkButton = ({ url = '/', title = 'Home', onClose }) => {
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const user = {
     role: 'admin',
   };
@@ -49,6 +49,7 @@ const Header = () => {
         top={'6'}
         left={'6'}
         onClick={onOpen}
+        zIndex={'overlay'}
       >
         <RiMenu5Fill />
       </Button>
@@ -59,27 +60,23 @@ const Header = () => {
           <DrawerHeader borderBottomWidth={'1px'}>Course Bundler</DrawerHeader>
           <DrawerBody>
             <VStack spacing={'4'} alignItems={'flex-start'}>
-              <LinkButton onClick={() => onClose()} url={'/'} title={'Home'} />
+              <LinkButton onClose={onClose} url={'/'} title={'Home'} />
               <LinkButton
-                onClick={() => onClose()}
+                onClose={onClose}
                 url={'/courses'}
                 title={'Browse All Courses'}
               />
               <LinkButton
-                onClick={onClose}
+                onClose={onClose}
                 url={'/request'}
                 title={'Request a course'}
               />
               <LinkButton
-                onClick={onClose}
+                onClose={onClose}
                 url={'/contact'}
                 title={'Contact Us'}
               />
-              <LinkButton
-                onClick={() => onClose()}
-                url={'/about'}
-                title={'About'}
-              />
+              <LinkButton onClose={onClose} url={'/about'} title={'About'} />
               <HStack
                 justifyContent={'space-evenly'}
                 position={'absolute'}
