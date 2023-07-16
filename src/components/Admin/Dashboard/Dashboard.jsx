@@ -10,6 +10,7 @@ import {
 import cursor from '../../../assets/images/cursor.png';
 import { Sidebar } from '../Sidebar';
 import { RiArrowDownLine, RiArrowUpLine } from 'react-icons/ri';
+import { DoughnutChart, LineChart } from './Chart';
 
 //Component Databox
 const Databox = ({ title, qty, qtyPercentage, profit }) => {
@@ -91,19 +92,20 @@ const Dashboard = () => {
         <Box
           m={[0, 16]}
           borderRadius={'lg'}
-          padding={[8, 16]}
+          padding={[0, 16]}
           mt={[4, 16]}
           boxShadow={'-2px 0 10px rgba(107,70,193,0.5)'}
-          display={'flex'}
-          justifyContent={'center'}
         >
           <Heading
             textAlign={['center', 'left']}
             size={'md'}
             children="Views Graph"
+            pt={[8, 0]}
+            ml={[0, 16]}
           />
 
           {/* Line Graph here */}
+          <LineChart />
         </Box>
         <Grid templateColumns={['1fr', '2fr 1fr']}>
           <Box padding={4}>
@@ -127,7 +129,8 @@ const Dashboard = () => {
               mb={4}
               children={'Users'}
             />
-            {/* Donut Graph */}
+            {/* Doughnut Graph */}
+            <DoughnutChart />
           </Box>
         </Grid>
       </Box>
