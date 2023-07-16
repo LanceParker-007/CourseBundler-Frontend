@@ -91,16 +91,16 @@ const Dashboard = () => {
         <Box
           m={[0, 16]}
           borderRadius={'lg'}
-          padding={[0, 16]}
+          padding={[8, 16]}
           mt={[4, 16]}
           boxShadow={'-2px 0 10px rgba(107,70,193,0.5)'}
+          display={'flex'}
+          justifyContent={'center'}
         >
           <Heading
             textAlign={['center', 'left']}
             size={'md'}
             children="Views Graph"
-            pt={['8', '0']}
-            ml={[0, 16]}
           />
 
           {/* Line Graph here */}
