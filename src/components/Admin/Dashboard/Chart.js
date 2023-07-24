@@ -83,7 +83,7 @@ export const DoughnutChart = () => {
     ],
   };
 
-  return <Doughnut data={data} />;
+  return <Doughnut data={data} options={options} />;
 };
 
 function getLastYearMonths() {
