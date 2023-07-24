@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../redux/actions/userAction';
 
 //Remember to DeStructure
 const LinkButton = ({ url = '/', title = 'Home', onClose }) => {
@@ -32,9 +34,10 @@ const Header = ({ isAuthenticated = false, user }) => {
   //   role: 'admin',
   // };
 
+  const dispatch = useDispatch();
   const logoutHandler = () => {
-    console.log('logout');
     onClose();
+    dispatch(logout());
   };
 
   return (

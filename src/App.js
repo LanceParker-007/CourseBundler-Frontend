@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
 import { loadUser } from './redux/actions/userAction';
+import { ProtectedRoute } from 'protected-route-react';
 
 const App = () => {
   window.addEventListener('contextmenu', e => {
@@ -66,11 +67,38 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/request" element={<Request />} />
           <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/updateprofile" element={<UpdateProfile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute
+                isAuthenticated={!isAuthenticated}
+                redirect="/profile"
+              >
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRoute
+                isAuthenticated={!isAuthenticated}
+                redirect="/profile"
+              >
+                <Register />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/subscribe" element={<Subscribe />} />
