@@ -24,32 +24,8 @@ import { Link } from 'react-router-dom';
 import { fileUploadCss } from '../Auth/Register';
 import { useState } from 'react';
 
-const Profile = () => {
+const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const user = {
-    name: 'John',
-    email: 'john@example.com',
-    createdAt: String(new Date()),
-    role: 'user',
-    subscription: {
-      status: 'active',
-    },
-    playlist: [
-      {
-        course: 'Course_1',
-        poster: 'http://examplePoster1.com',
-      },
-      {
-        course: 'Course_2',
-        poster: 'http://examplePoster2.com',
-      },
-      {
-        course: 'Course_3',
-        poster: 'http://examplePoster3.com',
-      },
-    ],
-  };
 
   const removeFromPlaylistHandler = _id => {
     console.log('Removed ', _id);
@@ -71,7 +47,7 @@ const Profile = () => {
         p={8}
       >
         <VStack>
-          <Avatar src={''} boxSize={'48'} />
+          <Avatar src={user.avatar.url} boxSize={'48'} />
           <Button colorScheme="yellow" variant={'ghost'} onClick={onOpen}>
             Change Photo
           </Button>
@@ -92,7 +68,7 @@ const Profile = () => {
           {user.role !== 'admin' && (
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
-              {user.subscription.status === 'active' ? (
+              {user.subscription && user.subscription.status === 'active' ? (
                 <Button color={'yellow.500'} variant={'unstyled'}>
                   Cancel Subscription
                 </Button>

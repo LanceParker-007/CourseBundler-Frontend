@@ -9,7 +9,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { register } from '../../redux/actions/userAction';
 
 export const fileUploadCss = {
   cursor: 'pointer',
@@ -46,11 +48,25 @@ const Register = () => {
     };
   };
 
+  const dispatch = useDispatch();
+
+  const submitHandler = e => {
+    e.preventDefault();
+    const myForm = new FormData();
+
+    myForm.append('name', name);
+    myForm.append('email', email);
+    myForm.append('password', password);
+    myForm.append('file', image); //thid "file" is same as in multer backend file
+
+    dispatch(register(myForm));
+  };
+
   return (
     <Container height={'95vh'}>
       <VStack height={'full'} justifyContent={'center'} spacing={16}>
         <Heading textTransform={'uppercase'} children={'Registration'} />
-        <form style={{ width: '100%' }}>
+        <form onSubmit={submitHandler} style={{ width: '100%' }}>
           <Box my={4} display={'flex'} justifyContent={'center'}>
             <Avatar src={imagePreview} size={'2xl'} />
           </Box>
