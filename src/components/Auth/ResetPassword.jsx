@@ -1,16 +1,40 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { resetPassword } from '../../redux/actions/profileAction';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const params = useParams();
+  const navigate = useNavigate();
 
-  console.log(params.token);
+  const dispatch = useDispatch();
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(resetPassword(params.token, password));
+  };
+
+  //----------Mean while---------
+  const { loading, message, error } = useSelector(state => state.profile);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+      navigate('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, error, message]);
+  //------------------------------
 
   return (
     <Container padding={16} height={'90vh'}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           children={'Reset Password'}
           my="16"
@@ -27,7 +51,12 @@ const ResetPassword = () => {
             type="password"
             focusBorderColor="yellow.500"
           />
-          <Button type="submit" width={'full'} colorScheme="yellow">
+          <Button
+            isLoading={loading}
+            type="submit"
+            width={'full'}
+            colorScheme="yellow"
+          >
             Reset Password
           </Button>
         </VStack>

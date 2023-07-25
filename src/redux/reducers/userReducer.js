@@ -105,6 +105,32 @@ export const profileReducer = createReducer(
       state.error = action.payload;
     },
 
+    //Forget Password
+    forgetPasswordRequest: state => {
+      state.loading = true;
+    },
+    forgetPasswordSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    forgetPasswordFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    //Reset Password
+    resetPasswordRequest: state => {
+      state.loading = true;
+    },
+    resetPasswordSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    resetPasswordFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     //Update Profile Picture
     updateProfilePictureRequest: state => {
       state.loading = true;
