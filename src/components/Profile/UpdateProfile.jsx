@@ -1,14 +1,45 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProfile } from '../../redux/actions/profileAction';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
+import { loadUser } from '../../redux/actions/userAction';
+import { useNavigate } from 'react-router-dom';
 
-const UpdateProfile = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
+const UpdateProfile = ({ user }) => {
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const submitHandler = async e => {
+    e.preventDefault();
+    //new FormData() tab karte jab image/video ho kuch bewakoof
+    await dispatch(updateProfile(name, email));
+    await dispatch(loadUser());
+    navigate('/profile');
+  };
+
+  //-------- --------------In the mean time
+  const { loading, message, error } = useSelector(state => state.profile);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]); //Why disptach in dependencies
+  //----------------------
 
   return (
     <Container minH={'90vh'} padding={16}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           children={'Update Profile'}
           textTransform={'uppercase'}
@@ -31,7 +62,12 @@ const UpdateProfile = () => {
             type="email"
             focusBorderColor="yellow.500"
           />
-          <Button w={'full'} type="submit" colorScheme="yellow">
+          <Button
+            isLoading={loading}
+            w={'full'}
+            type="submit"
+            colorScheme="yellow"
+          >
             Update
           </Button>
         </VStack>

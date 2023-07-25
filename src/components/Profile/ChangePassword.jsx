@@ -1,14 +1,38 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePassword } from '../../redux/actions/profileAction';
+import { toast } from 'react-hot-toast';
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  const dispatch = useDispatch();
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(changePassword(oldPassword, newPassword));
+  };
+
+  //-------- --------------In the mean time
+  const { loading, message, error } = useSelector(state => state.profile);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]); //Why disptach in dependencies
+  //----------------------
+
   return (
     <Container minH={'90vh'} padding={16}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           children={'Change Password'}
           textTransform={'uppercase'}
@@ -18,7 +42,7 @@ const ChangePassword = () => {
         <VStack spacing={8}>
           <Input
             required
-            id="password"
+            id="oldpPssword"
             value={oldPassword}
             onChange={e => setOldPassword(e.target.value)}
             placeholder="Old password"
@@ -27,14 +51,19 @@ const ChangePassword = () => {
           />
           <Input
             required
-            id="password"
+            id="newPassword"
             value={newPassword}
             onChange={e => setNewPassword(e.target.value)}
             placeholder="New password"
             type="password"
             focusBorderColor="yellow.500"
           />
-          <Button w={'full'} type="submit" colorScheme="yellow">
+          <Button
+            w={'full'}
+            isLoading={loading}
+            type="submit"
+            colorScheme="yellow"
+          >
             Change
           </Button>
         </VStack>

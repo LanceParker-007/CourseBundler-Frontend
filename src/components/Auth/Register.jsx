@@ -57,7 +57,7 @@ const Register = () => {
     myForm.append('name', name);
     myForm.append('email', email);
     myForm.append('password', password);
-    myForm.append('file', image); //thid "file" is same as in multer backend file
+    myForm.append('file', image); //this "file" is same as in multer backend file
 
     dispatch(register(myForm));
   };

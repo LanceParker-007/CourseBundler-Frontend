@@ -18,11 +18,15 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { fileUploadCss } from '../Auth/Register';
 import { useState } from 'react';
+import { updateProfilePicture } from '../../redux/actions/profileAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from '../../redux/actions/userAction';
+import { toast } from 'react-hot-toast';
 
 const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -31,10 +35,30 @@ const Profile = ({ user }) => {
     console.log('Removed ', _id);
   };
 
-  const changeImageSubmitHandler = (e, image) => {
+  const dispatch = useDispatch();
+  const changeImageSubmitHandler = async (e, image) => {
+    console.log('Changing image');
     e.preventDefault();
-    console.log('Photo Changed');
+    const myForm = new FormData();
+    myForm.append('file', image);
+    await dispatch(updateProfilePicture(myForm));
+    await dispatch(loadUser());
   };
+
+  //-------- --------------In the mean time
+  const { loading, message, error } = useSelector(state => state.profile);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]); //Why disptach in dependencies
+  //----------------------
 
   return (
     <Container minH={'95vh'} maxW={'container.lg'} py={8}>
@@ -62,7 +86,7 @@ const Profile = ({ user }) => {
             <Text children={user.email} />
           </HStack>
           <HStack>
-            <Text children="CreeatedAt" fontWeight={'bold'} />
+            <Text children="CreatedAt" fontWeight={'bold'} />
             <Text children={user.createdAt.split('T')[0]} />
           </HStack>
           {user.role !== 'admin' && (
@@ -124,6 +148,7 @@ const Profile = ({ user }) => {
         isOpen={isOpen}
         onClose={onClose}
         changeImageSubmitHandler={changeImageSubmitHandler}
+        loading={loading}
       />
     </Container>
   );
@@ -132,7 +157,12 @@ const Profile = ({ user }) => {
 export default Profile;
 
 //Change_Avatar/Photo_Box
-function ChangePhotoBox({ isOpen, onClose, changeImageSubmitHandler }) {
+function ChangePhotoBox({
+  isOpen,
+  onClose,
+  changeImageSubmitHandler,
+  loading,
+}) {
   const [image, setImage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
 
@@ -169,8 +199,10 @@ function ChangePhotoBox({ isOpen, onClose, changeImageSubmitHandler }) {
                   type="file"
                   css={{ '&::file-selector-button': fileUploadCss }}
                   onChange={changeImage}
+                  accept="image/*"
                 />
                 <Button
+                  isLoading={loading}
                   onClick={closeHandler}
                   type="submit"
                   width={'full'}
