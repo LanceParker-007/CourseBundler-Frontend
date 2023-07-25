@@ -9,8 +9,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getAllCourses } from '../../redux/actions/courseAction';
+import { toast } from 'react-hot-toast';
 
 //Course Component
 const Course = ({
@@ -73,17 +76,30 @@ const Course = ({
 const Courses = () => {
   const [keyword, setKeyword] = useState();
   const [category, setCategory] = useState();
-
-  const addToPlaylistHandler = id => {
-    console.log('Added to playlist');
-  };
+  const dispatch = useDispatch();
 
   const categories = [
     'Web Dev',
     'Artificial Intelligence',
+    'DSA',
     'App dev',
     'Game Dev',
   ];
+
+  const { loading, courses, error } = useSelector(state => state.course);
+
+  useEffect(() => {
+    dispatch(getAllCourses(category, keyword));
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+  }, [category, keyword, dispatch, courses, error]); //Why dispatch
+
+  const addToPlaylistHandler = courseId => {
+    console.log('Added to playlist', courseId);
+  };
+
   return (
     <Container minHeight={'95vh'} maxWidth={'container.lg'} paddingY={8}>
       <Heading children={'All Courses'} m={8} />
@@ -114,16 +130,23 @@ const Courses = () => {
         justifyContent={['flex-start', 'space-evenly']}
         alignItems={['center', 'flex-start']}
       >
-        <Course
-          title={'Sample'}
-          description={'Sample'}
-          views={'Sample'}
-          imageSrc={'Sample'}
-          id={'Sample'}
-          creator={'Sample Boy'}
-          lectureCount={2}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
+        {courses.length > 0 ? (
+          courses.map(item => (
+            <Course
+              key={item._id}
+              title={item.title}
+              description={item.description}
+              views={item.views}
+              imageSrc={item.poster.url}
+              id={item._id}
+              creator={item.createdBy}
+              lectureCount={item.numOfVideos}
+              addToPlaylistHandler={addToPlaylistHandler}
+            />
+          ))
+        ) : (
+          <Heading mt="4">Will be available soon!</Heading>
+        )}
       </Stack>
     </Container>
   );
