@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getAllCourses } from '../../redux/actions/courseAction';
 import { toast } from 'react-hot-toast';
+import Loader from '../Layout/Loader/Loader';
 
 //Course Component
 const Course = ({
@@ -27,7 +28,12 @@ const Course = ({
   lectureCount,
 }) => {
   return (
-    <VStack className="course" justifyContent={['center', 'flex-start']}>
+    <VStack
+      className="course"
+      justifyContent={['center', 'flex-start']}
+      backgroundColor={'yellow.600'}
+      pb={4}
+    >
       <Image src={imageSrc} boxSize={60} objectFit={'contain'} />
       <Heading
         children={title}
@@ -74,8 +80,8 @@ const Course = ({
 };
 
 const Courses = () => {
-  const [keyword, setKeyword] = useState();
-  const [category, setCategory] = useState();
+  const [keyword, setKeyword] = useState('');
+  const [category, setCategory] = useState('');
   const dispatch = useDispatch();
 
   const categories = [
@@ -94,7 +100,7 @@ const Courses = () => {
       toast.error(error);
       dispatch({ type: 'clearError' });
     }
-  }, [category, keyword, dispatch, courses, error]); //Why dispatch
+  }, [category, keyword, dispatch, error]); //Why dispatch
 
   const addToPlaylistHandler = courseId => {
     console.log('Added to playlist', courseId);
@@ -130,7 +136,7 @@ const Courses = () => {
         justifyContent={['flex-start', 'space-evenly']}
         alignItems={['center', 'flex-start']}
       >
-        {courses.length > 0 ? (
+        {courses && courses.length > 0 ? (
           courses.map(item => (
             <Course
               key={item._id}
