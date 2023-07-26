@@ -1,6 +1,7 @@
 import { server } from '../store';
 import axios from 'axios';
 
+//Auth actions
 //using as dispatch(login(email,password)) in Login.jsx
 export const login = (email, password) => async dispatch => {
   try {
@@ -59,5 +60,48 @@ export const register = formdata => async dispatch => {
     dispatch({ type: 'registerSuccess', payload: data });
   } catch (error) {
     dispatch({ type: 'registerFail', payload: error.response.data.message });
+  }
+};
+
+//Payment Actions
+//Buy subscription
+export const buySubscription = () => async dispatch => {
+  try {
+    dispatch({ type: 'buySubscriptionRequest' });
+
+    const { data } = await axios.get(`${server}/subscribe`, {
+      withCredentials: true,
+    });
+
+    dispatch({
+      type: 'buySubscriptionSuccess',
+      payload: data.subscriptionId,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'buySubscriptionFail',
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//Buy subscription
+export const cancelSubscription = () => async dispatch => {
+  try {
+    dispatch({ type: 'cancelSubscriptionRequest' });
+
+    const { data } = await axios.delete(`${server}/subscribe/cancel`, {
+      withCredentials: true,
+    });
+
+    dispatch({
+      type: 'cancelSubscriptionSuccess',
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'cancelSubscriptionFail',
+      payload: error.response.data.message,
+    });
   }
 };

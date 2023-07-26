@@ -29,12 +29,17 @@ import {
   updateProfilePicture,
 } from '../../redux/actions/profileAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from '../../redux/actions/userAction';
+import { cancelSubscription, loadUser } from '../../redux/actions/userAction';
 import { toast } from 'react-hot-toast';
 
 const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { loading, message, error } = useSelector(state => state.profile);
+  const {
+    loading: subscriptionLoading,
+    message: subscriptionMessage,
+    error: subscriptionError,
+  } = useSelector(state => state.subscription);
   const dispatch = useDispatch();
 
   const changeImageSubmitHandler = async (e, image) => {
@@ -46,13 +51,18 @@ const Profile = ({ user }) => {
     dispatch(loadUser());
   };
 
+  //Cancel Subscription
+  const cancelSubscriptionHandler = () => {
+    dispatch(cancelSubscription());
+  };
+
+  //Remove from playlist method
   const removeFromPlaylistHandler = async id => {
     await dispatch(removeFromPlaylist(id));
     dispatch(loadUser());
   };
 
   //----------------------In the mean time
-
   if (error) {
     toast.error(error);
     dispatch({ type: 'clearError' });
@@ -61,7 +71,20 @@ const Profile = ({ user }) => {
     toast.success(message);
     dispatch({ type: 'clearMessage' });
   }
-  useEffect(() => {}, [dispatch]); //Why disptach in dependencies
+
+  useEffect(() => {
+    //error, message, subscriptionError, subscriptionMessage
+    //but mene bahar kar diye hain
+    if (subscriptionError) {
+      toast.error(subscriptionError);
+      dispatch({ type: 'clearError' });
+    }
+    if (subscriptionMessage) {
+      toast.success(subscriptionMessage);
+      dispatch({ type: 'clearMessage' });
+      dispatch(loadUser());
+    }
+  }, [dispatch, subscriptionError, subscriptionMessage]); //Why disptach in dependencies
   //----------------------
 
   return (
@@ -97,7 +120,12 @@ const Profile = ({ user }) => {
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
               {user.subscription && user.subscription.status === 'active' ? (
-                <Button color={'yellow.500'} variant={'unstyled'}>
+                <Button
+                  onClick={cancelSubscriptionHandler}
+                  color={'yellow.500'}
+                  variant={'unstyled'}
+                  isLoading={subscriptionLoading}
+                >
                   Cancel Subscription
                 </Button>
               ) : (

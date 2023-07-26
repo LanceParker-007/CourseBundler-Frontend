@@ -166,3 +166,42 @@ export const profileReducer = createReducer(
     },
   }
 );
+
+export const subscriptionReducer = createReducer(
+  {},
+  {
+    //Buy Subscription States
+    buySubscriptionRequest: state => {
+      state.loading = true;
+    },
+    buySubscriptionSuccess: (state, action) => {
+      state.loading = false;
+      state.subscriptionId = action.payload; //backend se subId mil rahi hai
+    },
+    buySubscriptionFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    //Cancel Subscription States
+    cancelSubscriptionRequest: state => {
+      state.loading = true;
+    },
+    cancelSubscriptionSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    cancelSubscriptionFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    //Clear Message and Error
+    clearMessage: (state, action) => {
+      state.message = null;
+    },
+    clearError: (state, action) => {
+      state.error = null;
+    },
+  }
+);

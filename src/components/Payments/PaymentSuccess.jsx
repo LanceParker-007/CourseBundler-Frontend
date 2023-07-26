@@ -6,10 +6,13 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { RiCheckboxCircleFill } from 'react-icons/ri';
 
 const PaymentSuccess = () => {
+  //got from backend
+  const reference_pay_id = useSearchParams()[0].get('reference');
+
   return (
     <Container h={'90vh'} p={16}>
       <Heading
@@ -46,7 +49,7 @@ const PaymentSuccess = () => {
           <Button variant={'ghost'}>Go to profile</Button>
         </Link>
 
-        <Heading size={'xs'}> Reference: ref_id_from_backend</Heading>
+        <Heading size={'xs'}> Reference: {reference_pay_id}</Heading>
       </VStack>
     </Container>
   );
