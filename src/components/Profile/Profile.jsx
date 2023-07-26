@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Avatar,
   Button,
@@ -23,41 +24,44 @@ import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { fileUploadCss } from '../Auth/Register';
 import { useState } from 'react';
-import { updateProfilePicture } from '../../redux/actions/profileAction';
+import {
+  removeFromPlaylist,
+  updateProfilePicture,
+} from '../../redux/actions/profileAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../../redux/actions/userAction';
 import { toast } from 'react-hot-toast';
 
 const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const removeFromPlaylistHandler = _id => {
-    console.log('Removed ', _id);
-  };
-
+  const { loading, message, error } = useSelector(state => state.profile);
   const dispatch = useDispatch();
+
   const changeImageSubmitHandler = async (e, image) => {
     console.log('Changing image');
     e.preventDefault();
     const myForm = new FormData();
     myForm.append('file', image);
     await dispatch(updateProfilePicture(myForm));
-    await dispatch(loadUser());
+    dispatch(loadUser());
   };
 
-  //-------- --------------In the mean time
-  const { loading, message, error } = useSelector(state => state.profile);
+  const removeFromPlaylistHandler = async id => {
+    await dispatch(removeFromPlaylist(id));
+    dispatch(loadUser());
+  };
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch({ type: 'clearError' });
-    }
-    if (message) {
-      toast.success(message);
-      dispatch({ type: 'clearMessage' });
-    }
-  }, [dispatch, error, message]); //Why disptach in dependencies
+  //----------------------In the mean time
+
+  if (error) {
+    toast.error(error);
+    dispatch({ type: 'clearError' });
+  }
+  if (message) {
+    toast.success(message);
+    dispatch({ type: 'clearMessage' });
+  }
+  useEffect(() => {}, [dispatch]); //Why disptach in dependencies
   //----------------------
 
   return (
@@ -122,19 +126,21 @@ const Profile = ({ user }) => {
           padding={4}
         >
           {user.playlist.map(element => (
-            <VStack w={48} m={2} key={element.course}>
+            <VStack w={48} m={2} key={element.course} p={2} border={'1px'}>
               <Image
-                boxSize={'full'}
-                objectFit={'contain'}
+                // boxSize={'60'}
+                // objectFit={'contain'}
                 src={element.poster}
+                height={'150'}
               />
               <HStack>
                 <Link to={`/course/${element.course}`}>
-                  <Button variant={'ghost'} colorScheme="yellow">
+                  <Button variant={'outline'} colorScheme="yellow">
                     Watch Now
                   </Button>
                 </Link>
                 <Button
+                  isLoading={loading}
                   onClick={() => removeFromPlaylistHandler(element.course)}
                 >
                   <RiDeleteBin7Fill />
@@ -156,7 +162,7 @@ const Profile = ({ user }) => {
 
 export default Profile;
 
-//Change_Avatar/Photo_Box
+//Change_Avatar/Photo_Box Component
 function ChangePhotoBox({
   isOpen,
   onClose,

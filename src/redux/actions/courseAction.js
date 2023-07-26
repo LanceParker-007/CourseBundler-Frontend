@@ -1,6 +1,7 @@
 import { server } from '../store';
 import axios from 'axios';
 
+//Fetch all courses
 export const getAllCourses =
   (category = '', keyword = '') =>
   async dispatch => {

@@ -14,7 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getAllCourses } from '../../redux/actions/courseAction';
 import { toast } from 'react-hot-toast';
-import Loader from '../Layout/Loader/Loader';
+import { addToPlaylist } from '../../redux/actions/profileAction';
+import { loadUser } from '../../redux/actions/userAction';
+// import Loader from '../Layout/Loader/Loader';
 
 //Course Component
 const Course = ({
@@ -26,13 +28,15 @@ const Course = ({
   creator,
   description,
   lectureCount,
+  loading,
 }) => {
   return (
     <VStack
       className="course"
       justifyContent={['center', 'flex-start']}
-      backgroundColor={'yellow.600'}
+      backgroundColor={'blackAlpha.200'}
       pb={4}
+      borderRadius={'md'}
     >
       <Image src={imageSrc} boxSize={60} objectFit={'contain'} />
       <Heading
@@ -68,9 +72,10 @@ const Course = ({
           <Button colorScheme={'yellow'}>Watch Now</Button>
         </Link>
         <Button
-          variant={'ghost'}
+          isLoading={loading}
           colorScheme={'yellow'}
           onClick={() => addToPlaylistHandler(id)}
+          variant={'outline'}
         >
           Add to playlist
         </Button>
@@ -92,18 +97,31 @@ const Courses = () => {
     'Game Dev',
   ];
 
-  const { loading, courses, error } = useSelector(state => state.course);
+  // eslint-disable-next-line no-unused-vars
+  const { loading, courses, error, message } = useSelector(
+    state => state.course
+  );
 
+  //------------Mean While --------
   useEffect(() => {
     dispatch(getAllCourses(category, keyword));
-    if (error) {
-      toast.error(error);
-      dispatch({ type: 'clearError' });
-    }
-  }, [category, keyword, dispatch, error]); //Why dispatch
+  }, [category, keyword, dispatch]);
 
-  const addToPlaylistHandler = courseId => {
-    console.log('Added to playlist', courseId);
+  // useEffect(() => {
+  if (error) {
+    toast.error(error);
+    dispatch({ type: 'clearError' });
+  }
+  if (message) {
+    toast.success(message);
+    dispatch({ type: 'clearMessage' });
+  }
+  // }, [category, keyword, dispatch, error, message]); //Why dispatch
+  //------------------------------------------
+
+  const addToPlaylistHandler = async courseId => {
+    await dispatch(addToPlaylist(courseId));
+    dispatch(loadUser());
   };
 
   return (
@@ -148,6 +166,7 @@ const Courses = () => {
               creator={item.createdBy}
               lectureCount={item.numOfVideos}
               addToPlaylistHandler={addToPlaylistHandler}
+              loading={loading}
             />
           ))
         ) : (

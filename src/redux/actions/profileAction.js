@@ -115,3 +115,47 @@ export const resetPassword = (token, password) => async dispatch => {
     });
   }
 };
+
+//Add to playlist
+export const addToPlaylist = id => async dispatch => {
+  try {
+    dispatch({ type: 'addToPlaylistRequest' });
+
+    const { data } = await axios.post(
+      `${server}/addtoplaylist`,
+      { id }, //courseId
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    dispatch({ type: 'addToPlaylistSuccess', payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: 'addToPlaylistFail',
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//Remove from playlist
+export const removeFromPlaylist = id => async dispatch => {
+  try {
+    dispatch({ type: 'removeFromPlaylistRequest' });
+
+    const { data } = await axios.delete(
+      `${server}/removefromplaylist?id=${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch({ type: 'removeFromPlaylistSuccess', payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: 'removeFromPlaylistFail',
+      payload: error.response.data.message,
+    });
+  }
+};
