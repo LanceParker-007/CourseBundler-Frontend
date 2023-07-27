@@ -1,38 +1,47 @@
 import { Box, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import introVideo from '../../assets/videos/introVideo.mp4';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, useParams } from 'react-router-dom';
+import { getCourseLecture } from '../../redux/actions/courseAction';
+import Loader from '../Layout/Loader/Loader';
 
-const CoursePage = () => {
+const CoursePage = ({ user }) => {
   const [lectureNumber, setLectureNumber] = useState(0);
+  const params = useParams();
+  const dispatch = useDispatch();
 
-  const lectures = [
-    {
-      _id: 'jfjhjf',
-      title: 'sample 1',
-      description: 'Sample Description',
-      video: {
-        url: 'fdfwf',
-      },
-    },
-    {
-      _id: 'qazwsx',
-      title: 'sample 2',
-      description: 'Sample Description',
-      video: {
-        url: 'fdfwf',
-      },
-    },
-    {
-      _id: 'oiuoio',
-      title: 'sample 3',
-      description: 'Sample Description',
-      video: {
-        url: 'fdfwf',
-      },
-    },
-  ];
+  const { loading, lectures } = useSelector(state => state.course);
+  // console.log(lectures);
 
-  return (
+  // const lectures = [
+  //   {
+  //     _id: 'jfjhjf',
+  //     title: 'sample 1',
+  //     description: 'Sample Description',
+  //     video: {
+  //       url: 'fdfwf',
+  //     },
+  //   },
+  // ];
+
+  useEffect(() => {
+    dispatch(getCourseLecture(params.id));
+    console.log('chala');
+  }, [dispatch, params.id]);
+
+  if (
+    user.role !== 'admin' &&
+    (user.subscription === undefined || user.subscription.status !== 'active')
+  ) {
+    // toast.error('Only Subsribed users can access this!');
+    return <Navigate to={'/subscribe'} />;
+  }
+
+  return loading ? (
+    <Loader />
+  ) : (
     <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']}>
       <Box>
         <video

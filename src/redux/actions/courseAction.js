@@ -19,3 +19,21 @@ export const getAllCourses =
       });
     }
   };
+
+//Get course lectures, accessible only by subsribed users using id:CourseId
+export const getCourseLecture = id => async dispatch => {
+  try {
+    dispatch({ type: 'getCourseRequest' });
+
+    const { data } = await axios.get(`${server}/course/${id}`, {
+      withCredentials: true,
+    });
+
+    dispatch({ type: 'getCourseSuccess', payload: data.lectures });
+  } catch (error) {
+    dispatch({
+      type: 'getCourseFail',
+      payload: error.response.data.message,
+    });
+  }
+};
