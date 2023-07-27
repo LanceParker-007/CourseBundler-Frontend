@@ -19,23 +19,14 @@ import cursor from '../../../assets/images/cursor.png';
 import { Sidebar } from '../Sidebar';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import CourseModal from './CourseModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllCourses } from '../../../redux/actions/courseAction';
 
 const AdminCourses = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const courses = [
-    {
-      _id: 'course-001',
-      title: 'React Course',
-      category: 'Web Development',
-      poster: {
-        url: 'https://cdn.pixabay.com/photo/2018/05/18/15/30/web-design-3411373_640.jpg',
-      },
-      createdBy: '6 pack programmmer',
-      views: 123,
-      numOfVideos: 12,
-    },
-  ];
+  const dispatch = useDispatch();
+  const { courses } = useSelector(state => state.course);
 
   const courseDetailsHandler = courseId => {
     console.log(courseId);
@@ -54,6 +45,10 @@ const AdminCourses = () => {
     e.preventDefault();
     console.log('Lecture added');
   };
+
+  useEffect(() => {
+    dispatch(getAllCourses());
+  }, [dispatch]);
 
   return (
     <Grid

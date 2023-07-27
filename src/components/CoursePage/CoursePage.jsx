@@ -28,10 +28,10 @@ const CoursePage = ({ user }) => {
 
   useEffect(() => {
     dispatch(getCourseLecture(params.id));
-    console.log('chala');
   }, [dispatch, params.id]);
 
   if (
+    //Protecting subscribers content, we ar laoding the lectures but if user is not eligible to access them we redirec them t  /subscribe page
     user.role !== 'admin' &&
     (user.subscription === undefined || user.subscription.status !== 'active')
   ) {
