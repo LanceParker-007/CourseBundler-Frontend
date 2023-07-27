@@ -60,7 +60,7 @@ const CourseModal = ({
   courseTitle,
   deleteButtonHandler,
   addLectureHandler,
-  lecures = [],
+  lectures = [],
   loading,
 }) => {
   const [title, setTitle] = useState();
@@ -107,7 +107,7 @@ const CourseModal = ({
                 <Heading children={`#${id}`} size={'sm'} opacity={0.4} />
               </Box>
               <Heading children="Lectures" size={'lg'} />
-              {lecures.map((item, index) => {
+              {lectures.map((item, index) => {
                 return (
                   <VideoCard
                     key={index}
