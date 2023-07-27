@@ -27,6 +27,7 @@ const VideoCard = ({
   lectureId,
   courseId,
   deleteButtonHandler,
+  loading,
 }) => {
   return (
     <Stack
@@ -42,6 +43,7 @@ const VideoCard = ({
         <Text children={description} />
       </Box>
       <Button
+        isLoading={loading}
         color={'purple.600'}
         onClick={() => deleteButtonHandler(courseId, lectureId)}
       >
@@ -58,7 +60,8 @@ const CourseModal = ({
   courseTitle,
   deleteButtonHandler,
   addLectureHandler,
-  lecures = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+  lecures = [],
+  loading,
 }) => {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
@@ -108,12 +111,13 @@ const CourseModal = ({
                 return (
                   <VideoCard
                     key={index}
-                    title={'React Intro'}
-                    description={'This is a intro lecture fro react course.'}
+                    title={item.title}
+                    description={item.description}
                     num={index + 1}
-                    lectureId={'lecture_Id_1'}
+                    lectureId={item._id}
                     courseId={id}
                     deleteButtonHandler={deleteButtonHandler}
+                    loading={loading}
                   />
                 );
               })}
@@ -162,7 +166,12 @@ const CourseModal = ({
                       src={videoPrev}
                     ></video>
                   )}
-                  <Button w={'full'} colorScheme="purple" type="submit">
+                  <Button
+                    isLoading={loading}
+                    w={'full'}
+                    colorScheme="purple"
+                    type="submit"
+                  >
                     Upload
                   </Button>
                 </VStack>

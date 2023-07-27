@@ -13,18 +13,6 @@ const CoursePage = ({ user }) => {
   const dispatch = useDispatch();
 
   const { loading, lectures } = useSelector(state => state.course);
-  // console.log(lectures);
-
-  // const lectures = [
-  //   {
-  //     _id: 'jfjhjf',
-  //     title: 'sample 1',
-  //     description: 'Sample Description',
-  //     video: {
-  //       url: 'fdfwf',
-  //     },
-  //   },
-  // ];
 
   useEffect(() => {
     dispatch(getCourseLecture(params.id));
@@ -41,7 +29,7 @@ const CoursePage = ({ user }) => {
 
   return loading ? (
     <Loader />
-  ) : (
+  ) : lectures.length > 0 ? (
     <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']}>
       <Box>
         <video
@@ -79,6 +67,10 @@ const CoursePage = ({ user }) => {
         ))}
       </VStack>
     </Grid>
+  ) : (
+    <VStack h={'90vh'} justifyContent={'center'} alignItems={'center'}>
+      <Heading size={'4xl'} children={'Lectures will be added soon!'} />
+    </VStack>
   );
 };
 
