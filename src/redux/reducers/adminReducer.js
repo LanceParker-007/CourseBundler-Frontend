@@ -16,7 +16,7 @@ export const adminReducer = createReducer(
       state.error = action.payload;
     },
 
-    //Create Course
+    //Delete Course
     deleteCourseRequest: state => {
       state.loading = true;
     },
@@ -25,6 +25,32 @@ export const adminReducer = createReducer(
       state.message = action.payload;
     },
     deleteCourseFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    //Add lecture to a course
+    addLectureRequest: state => {
+      state.loading = true;
+    },
+    addLectureSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    addLectureFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    //Delete lecture to a course
+    deleteLectureRequest: state => {
+      state.loading = true;
+    },
+    deleteLectureSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    deleteLectureFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

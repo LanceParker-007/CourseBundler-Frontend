@@ -135,18 +135,21 @@ const CourseModal = ({
                     textTransform={'uppercase'}
                   />
                   <Input
+                    id="title"
                     focusBorderColor="purple.300"
                     placeholder="Title"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                   />
                   <Input
+                    id="description"
                     focusBorderColor="purple.300"
                     placeholder="Description"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                   />
                   <Input
+                    id="file"
                     accept="video/mp4"
                     required
                     type="file"

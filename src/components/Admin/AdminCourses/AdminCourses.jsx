@@ -20,24 +20,31 @@ import { Sidebar } from '../Sidebar';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import CourseModal from './CourseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getAllCourses,
   getCourseLecture,
 } from '../../../redux/actions/courseAction';
-import { deleteCourse } from '../../../redux/actions/adminAction';
+import {
+  addLecture,
+  deleteCourse,
+  deleteLecture,
+} from '../../../redux/actions/adminAction';
 import { toast } from 'react-hot-toast';
 
 const AdminCourses = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const dispatch = useDispatch();
   const { courses, lectures } = useSelector(state => state.course);
-  console.log(lectures);
-
   const { loading, error, message } = useSelector(state => state.admin);
 
-  const courseDetailsHandler = courseId => {
+  const [courseId, setCourseId] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
+
+  const courseDetailsHandler = (courseId, title) => {
     dispatch(getCourseLecture(courseId));
+    setCourseId(courseId);
+    setCourseTitle(title);
     onOpen();
   };
 
@@ -45,13 +52,21 @@ const AdminCourses = () => {
     dispatch(deleteCourse(courseId));
   };
 
-  const deleteLectureButtonHandler = (courseId, lectureId) => {
-    console.log(courseId, ',', lectureId);
+  const addLectureHandler = async (e, courseId, title, description, video) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+    myForm.append('title', title);
+    myForm.append('description', description);
+    myForm.append('file', video);
+
+    await dispatch(addLecture(courseId, myForm));
+    dispatch(getCourseLecture(courseId));
   };
 
-  const addLectureHandler = (e, courseId, title, description, video) => {
-    e.preventDefault();
-    console.log('Lecture added');
+  const deleteLectureButtonHandler = async (courseId, lectureId) => {
+    await dispatch(deleteLecture(courseId, lectureId));
+    dispatch(getCourseLecture(courseId));
   };
 
   useEffect(() => {
@@ -110,8 +125,8 @@ const AdminCourses = () => {
         <CourseModal
           isOpen={isOpen}
           onClose={onClose}
-          id={'courseIdFromAdminCourses'}
-          courseTitle={'React Course'}
+          id={courseId}
+          courseTitle={courseTitle}
           deleteButtonHandler={deleteLectureButtonHandler}
           addLectureHandler={addLectureHandler}
           lectures={lectures}
@@ -141,7 +156,7 @@ function Row({ item, courseDetailsHandler, deleteButtonHandler, loading }) {
         <HStack justifyContent={'flex-start'}>
           <Button
             isLoading={loading}
-            onClick={() => courseDetailsHandler(item._id)}
+            onClick={() => courseDetailsHandler(item._id, item.title)}
             variant={'outline'}
             color={'purple.500'}
           >
