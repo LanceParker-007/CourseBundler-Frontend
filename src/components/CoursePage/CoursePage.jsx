@@ -28,7 +28,7 @@ const CoursePage = ({ user }) => {
   }
 
   return loading ? (
-    <Loader />
+    <Loader color="purple.500" />
   ) : lectures.length > 0 ? (
     <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']}>
       <Box>
